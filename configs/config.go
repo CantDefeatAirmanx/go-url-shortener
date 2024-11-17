@@ -1,14 +1,20 @@
 package configs
 
 import (
+	"fmt"
 	"os"
 
+	"github.com/caarlos0/env/v11"
 	"github.com/joho/godotenv"
 )
 
 var config Config
 
 func LoadConfig() *Config {
+	fmt.Println(
+		os.Getenv("FOO_0_STR"),
+	)
+
 	var environment Environment = Environment(os.Getenv("GO_ENV"))
 	if environment == "" {
 		environment = DEV
@@ -17,18 +23,15 @@ func LoadConfig() *Config {
 		if err != nil {
 			panic(err)
 		}
+	} else {
+		environment = PROD
 	}
 
-	result := Config{
-		GO_ENV: environment,
-		Db: DbConfig{
-			Dsn: os.Getenv("DSN"),
-		},
-		APP_PORT: os.Getenv("APP_PORT"),
+	if err := env.Parse(&config); err != nil {
+		panic(err)
 	}
-	config = result
 
-	return &result
+	return &config
 }
 
 func GetConfig() *Config {
