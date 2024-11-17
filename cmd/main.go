@@ -12,10 +12,6 @@ func main() {
 	auth.NewAuthHandler(router)
 
 	config := configs.GetConfig()
-	fmt.Println(config.Db)
-	fmt.Println(config.Auth)
-	fmt.Println(config.Foo)
-
 	port := config.APP_PORT
 
 	server := http.Server{
