@@ -29,20 +29,23 @@ func (handler *AuthHandler) handleLogin() http.HandlerFunc {
 		if err != nil {
 			return
 		}
-
-		fmt.Println(reqPayload)
 		_ = reqPayload
 
 		resPayload := LoginResponse{
 			Token: "123",
 		}
 
-		http_helpers.WriteJsonRes(resWriter, resPayload, 200)
+		http_helpers.WriteJsonRes(resWriter, resPayload, http.StatusOK)
 	}
 }
 
 func (handler *AuthHandler) handleRegister() http.HandlerFunc {
 	return func(resWriter http.ResponseWriter, req *http.Request) {
-		fmt.Println("/register")
+		reqPayload, err := http_helpers.HandleJsonReqBody[RegisterRequest](&resWriter, req)
+		if err != nil {
+			return
+		}
+		_ = reqPayload
+		http_helpers.WriteJsonRes(resWriter, "ok", http.StatusOK)
 	}
 }
