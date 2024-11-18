@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"url_shortener/configs"
 	"url_shortener/internal/api/auth/v1"
+	"url_shortener/pkg/db"
 )
 
 func main() {
@@ -29,5 +30,10 @@ func main() {
 }
 
 func init() {
-	configs.LoadConfig()
+	config := configs.LoadConfig()
+
+	_, dbErr := db.NewDb(&db.Config{Dsn: config.Db.Dsn})
+	if dbErr != nil {
+		panic(dbErr)
+	}
 }
