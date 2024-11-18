@@ -4,14 +4,16 @@ import (
 	"fmt"
 	"net/http"
 	"url_shortener/configs"
-	"url_shortener/internal/api/v1/auth"
+	"url_shortener/internal/api/auth/v1"
 )
 
 func main() {
 	router := http.NewServeMux()
-	auth.NewAuthHandler(router)
 
 	config := configs.GetConfig()
+
+	auth.NewAuthHandler(router, auth.AuthHandlerConfig(config.Auth))
+
 	port := config.APP_PORT
 
 	server := http.Server{
