@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"url_shortener/configs"
 	"url_shortener/internal/api/auth/v1"
@@ -30,10 +31,13 @@ func main() {
 }
 
 func init() {
-	config := configs.LoadConfig()
+	config, err := configs.LoadConfig()
+	if err != nil {
+		log.Fatalf("failed to load config: %s", err.Error())
+	}
 
-	_, dbErr := db.NewDb(&db.Config{Dsn: config.Db.Dsn})
-	if dbErr != nil {
-		panic(dbErr)
+	_, err = db.NewDb(&db.Config{Dsn: config.Db.Dsn})
+	if err != nil {
+		log.Fatalf("failed to connect to db: %s", err.Error())
 	}
 }
