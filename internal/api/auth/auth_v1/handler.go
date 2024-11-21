@@ -1,4 +1,4 @@
-package auth
+package auth_v1
 
 import (
 	"fmt"
@@ -14,9 +14,9 @@ type AuthHandlerConfig struct {
 	Secret string
 }
 
-const prefix = "/api/v1/auth"
+const prefix = "/api/auth/v1"
 
-func NewAuthHandler(router *http.ServeMux, config AuthHandlerConfig) {
+func NewAuthHandlerV1(router *http.ServeMux, config AuthHandlerConfig) {
 	handler := AuthHandler{&config}
 
 	router.HandleFunc(fmt.Sprintf("POST %s/login", prefix), handler.handleLogin())

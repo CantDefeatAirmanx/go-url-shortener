@@ -5,8 +5,9 @@ import (
 	"log"
 	"net/http"
 	"url_shortener/configs"
-	"url_shortener/internal/api/auth/v1"
-	"url_shortener/pkg/db"
+	"url_shortener/internal/api/auth/auth_v1"
+	links_v1 "url_shortener/internal/api/links/v1"
+	"url_shortener/pkg/gorm"
 )
 
 func main() {
@@ -14,7 +15,8 @@ func main() {
 
 	config := configs.GetConfig()
 
-	auth.NewAuthHandler(router, auth.AuthHandlerConfig(config.Auth))
+	auth_v1.NewAuthHandlerV1(router, auth_v1.AuthHandlerConfig(config.Auth))
+	links_v1.NewLinksHandlerV1(router)
 
 	port := config.APP_PORT
 
@@ -36,7 +38,7 @@ func init() {
 		log.Fatalf("failed to load config: %s", err.Error())
 	}
 
-	_, err = db.NewDb(&db.Config{Dsn: config.Db.Dsn})
+	_, err = gorm.NewDb(&gorm.Config{Dsn: config.Db.Dsn})
 	if err != nil {
 		log.Fatalf("failed to connect to db: %s", err.Error())
 	}
