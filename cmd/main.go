@@ -21,7 +21,9 @@ func main() {
 
 	linksRepo := link_repository_v1.NewLinkRepositoryGorm(linksDb)
 	linksService := link_service_v1.NewLinkService(linksRepo)
-	links_handler_v1.NewLinksHandlerV1(links_handler_v1.LinksHandlerV1Deps{Router: router, Service: linksService})
+	links_handler_v1.NewLinksHandlerV1(
+		links_handler_v1.LinksHandlerV1Deps{Router: router, Service: linksService, Repository: linksRepo},
+	)
 
 	port := config.APP_PORT
 

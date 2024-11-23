@@ -8,8 +8,8 @@ import (
 )
 
 func WriteJsonRes(resWriter http.ResponseWriter, res interface{}, statusCode int) error {
-	resWriter.WriteHeader(statusCode)
 	resWriter.Header().Set(headers.ContentType, mediatypes.ApplicationJson)
+	resWriter.WriteHeader(statusCode)
 	err := json.NewEncoder(resWriter).Encode(res)
 
 	return err
