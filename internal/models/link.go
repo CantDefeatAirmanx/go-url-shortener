@@ -1,14 +1,12 @@
-package link
+package models
 
 import (
 	"math/rand"
 	"url_shortener/pkg/runes"
-
-	"gorm.io/gorm"
 )
 
 type Link struct {
-	gorm.Model
+	BaseModel
 	Url  string `json:"url"`
 	Hash string `json:"hash" gorm:"uniqueIndex"`
 }

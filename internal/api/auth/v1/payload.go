@@ -1,4 +1,4 @@
-package auth_v1
+package auth_handler_v1
 
 type LoginRequest struct {
 	Email    string `json:"email" validate:"required,email"`

@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 	"url_shortener/configs"
-	"url_shortener/internal/models/link"
-	"url_shortener/pkg/gorm"
+	"url_shortener/internal/models"
+	"url_shortener/pkg/gorm_db"
 )
 
 func main() {
@@ -13,10 +13,10 @@ func main() {
 		log.Fatal(err.Error())
 	}
 
-	db, err := gorm.NewDb(&gorm.Config{Dsn: config.Db.Dsn})
+	db, err := gorm_db.NewDb(&gorm_db.Config{Dsn: config.Db.Dsn})
 	if err != nil {
 		log.Fatalf("failed to connect to db: %s", err.Error())
 	}
 
-	db.AutoMigrate(&link.Link{})
+	db.AutoMigrate(&models.Link{})
 }
