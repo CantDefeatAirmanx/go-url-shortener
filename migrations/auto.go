@@ -13,7 +13,7 @@ func main() {
 		log.Fatal(err.Error())
 	}
 
-	db, err := gorm_db.NewDb(&gorm_db.Config{Dsn: config.Db.Dsn})
+	db, err := gorm_db.NewDb("links_db", &gorm_db.Config{Dsn: config.Db.Dsn})
 	if err != nil {
 		log.Fatalf("failed to connect to db: %s", err.Error())
 	}

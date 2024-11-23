@@ -3,9 +3,12 @@ package links_handler_v1
 import (
 	"net/http"
 	link_service_v1 "url_shortener/internal/service/link/v1"
+	"url_shortener/pkg/utils/http_helpers"
 )
 
-type LinksHandlerV1 struct{}
+type LinksHandlerV1 struct {
+	Service *link_service_v1.LinkService
+}
 
 type LinksHandlerV1Deps struct {
 	Service *link_service_v1.LinkService
@@ -15,7 +18,7 @@ type LinksHandlerV1Deps struct {
 const prefix = "/api/links/v1"
 
 func NewLinksHandlerV1(deps LinksHandlerV1Deps) *LinksHandlerV1 {
-	handler := LinksHandlerV1{}
+	handler := LinksHandlerV1{Service: deps.Service}
 
 	deps.Router.HandleFunc("POST "+prefix, handler.CreateLink())
 	deps.Router.HandleFunc("GET "+prefix+"/{"+getLinksParams.Id+"}", handler.GetLinks())
@@ -26,7 +29,22 @@ func NewLinksHandlerV1(deps LinksHandlerV1Deps) *LinksHandlerV1 {
 }
 
 func (handler *LinksHandlerV1) CreateLink() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
+	return func(resWriter http.ResponseWriter, req *http.Request) {
+		reqPayload, err :=
+			http_helpers.
+				HandleJsonReqBody[LinkCreateRequestBody](&resWriter, req)
+		if err != nil {
+			return
+		}
+
+		link, err := handler.Service.CreateLink(reqPayload.Url)
+
+		if err != nil {
+			_ = http_helpers.WriteJsonRes(resWriter, "Internal Server Error", http.StatusInternalServerError)
+			return
+		}
+
+		http_helpers.WriteJsonRes(resWriter, *link, http.StatusOK)
 	}
 }
 

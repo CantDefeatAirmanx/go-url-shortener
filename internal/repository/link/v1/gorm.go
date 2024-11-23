@@ -22,10 +22,16 @@ func NewLinkRepositoryGorm(db *gorm_db.Db) *LinkRepositoryGorm {
 	return singleTon
 }
 
-func (repository *LinkRepositoryGorm) Create() (int, error) {
-	panic("TODO: Implement")
+func (repository *LinkRepositoryGorm) Create(link *models.Link) (*models.Link, error) {
+	res := repository.Db.Create(link)
+
+	if res.Error != nil {
+		return nil, res.Error
+	}
+
+	return link, nil
 }
 
-func (repository *LinkRepositoryGorm) Get(id int) (*models.Link, error) {
+func (repository *LinkRepositoryGorm) Get(hash string) (*models.Link, error) {
 	panic("TODO: Implement")
 }

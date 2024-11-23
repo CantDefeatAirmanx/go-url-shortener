@@ -11,7 +11,7 @@ func ValidateReq[T any](resWriter *http.ResponseWriter, reqPayload T) error {
 	validationErr := validate.Struct(reqPayload)
 
 	if validationErr != nil {
-		WriteJsonRes(*resWriter, validationErr.Error(), 400)
+		WriteJsonRes(*resWriter, validationErr.Error(), http.StatusBadRequest)
 		return validationErr
 	}
 
